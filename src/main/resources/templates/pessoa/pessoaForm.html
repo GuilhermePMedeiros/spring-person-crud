@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	  xmlns:th="http://www.thymeleaf.org">
+	  
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Adicionar Pessoa</title>
+		<!--CSS-->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+		<!-- Icons Google -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	</head>
+	<body>
+
+		<header>
+			<!-- Navbar -->
+			<nav class="navbar navbar-light bg-light">
+			  <div class="container-fluid">
+			    <span class="navbar-brand mb-0 h1" style="font-weight: bold;">Loja Crud</span>
+			  </div>
+			</nav>
+		</header>
+
+		<section>
+			<div class="container" style="width: 50%; padding-bottom: 30px;">
+				
+				<nav aria-label="breadcrumb">
+				  <ol class="breadcrumb" style="background-color: white; padding-left: 0px; margin-top: 20px;">
+				    <li class="breadcrumb-item"><a href="/index">Home</a></li>
+				    <li class="breadcrumb-item"><a href="/pessoa/pessoasList">Lista de pessoas</a></li>
+				    <li class="breadcrumb-item active" aria-current="page">Adicionar nova pessoa</li>
+				  </ol>
+				</nav>
+
+				<div style="margin-top: 20px;">
+				
+					
+            		<th:block th:include="validation/mensageValidation"></th:block>
+			
+					<form th:object="${pessoa}" method="post" th:action="${pessoa.getId()} <= 0 ? '/pessoa/pessoaForm/save' : '/pessoa/update/' + ${pessoa.getId()} " class="row g-3 needs-validation" novalidate>
+						<!--  <input name="_method" type="hidden" value="post" />  -->
+						
+						<div th:if="${pessoa.getId()} > 0" class="col-12">
+						    <div class="input-group mb-3">
+						    	<span class="input-group-text" id="basic-addon1">ID</span>
+								<input type="text" class="form-control" name="id" th:value="${pessoa.getId()}" required disabled/>
+							</div>
+						</div>
+						
+						
+						<div class="col-12">
+						    <label class="form-label" for="nome" >Nome</label>
+							<input type="text" class="form-control" placeholder="Nome" name="nome" th:value="${pessoa.getNome()}" required/>
+							<div class="form-text" style="margin-bottom: 10px">Campo obrigatório*</div>
+							<div class="invalid-feedback"> Please choose a username.</div>
+							
+						</div>
+						
+						<div class="col-md-6">
+						  <label class="form-label" for="cpf" >CPF</label>
+						  <input type="number" min="1" max="99999999999" maxlength="11" class="form-control" placeholder="CPF - Somente os dígitos" name="cpf" th:value="${pessoa.getCpf()}" required/>
+						  <div class="form-text">Campo obrigatório*</div>
+						</div>
+						
+						<div class="col-md-6">
+						  <label class="form-label" for="rg" >RG</label>
+						  <input type="number" class="form-control" placeholder="RG - Somente os dígitos" name="rg" th:value="${pessoa.getRg()}" required/>
+						  <div class="form-text">Campo obrigatório*</div>
+						</div>
+
+						<div class="col-12">
+							<label class="form-label" for="sexo" >Sexo</label>
+							<select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="sexo" required>
+							  <option selected disabled >Selecione o seu sexo</option>
+							  <option th:each="IndSexo : ${T(br.com.guilhermesolucoes.lojacrud.nucleo.utils.indicadores.IndSexo).values()}"
+							  th:value="${IndSexo}" th:text="${IndSexo.getDescricao()}"></option>
+							</select>
+						  	<div class="form-text">Campo obrigatório*</div>						
+						</div>
+						
+						<div class="col-12">
+							<label class="form-label" for="dtNascimento" >Data de nascimento</label>
+							<input type="date" class="form-control" name="dtNascimento" th:value="${pessoa.getDtNascimento()}" required/>
+							<div class="form-text" style="margin-bottom: 10px">Campo obrigatório*</div>
+						</div>
+						
+						<div class="col-md-6">
+							<button type="submit" class="btn btn-primary">Salvar</button>
+							<a class="btn btn-outline-primary" href="/pessoa/pessoasList" role="button">Cancelar</a>
+						</div>
+												
+					</form>
+				</div>
+			</div>	
+		</section>
+		
+		<!-- Código de validações para formulários (Se vazio ou se preenchido)-->
+		<script type="text/javascript">
+			
+			// Código para desativar o envio de formulários se houver campos inválidos
+			// Code to disable form submission if there are invalid fields
+			(function () {
+			  'use strict'
+	
+			  // Buscando o formulário com a classe para aplicar o estilo de validação do Bootstrap personalizado
+			  // Fetching form with class to apply custom Bootstrap validation style
+			  var forms = document.querySelectorAll('.needs-validation')
+	
+			  // Faça um loop sobre eles e evite o envio
+			  // Loop over them and prevent submission
+			  Array.prototype.slice.call(forms)
+			    .forEach(function (form) {
+			      form.addEventListener('submit', function (event) {
+			        if (!form.checkValidity()) {
+			          event.preventDefault()
+			          event.stopPropagation()
+			        }
+	
+			        form.classList.add('was-validated')
+			      }, false)
+			    })
+			})()
+		</script>
+	</body>
+</html>
